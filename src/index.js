@@ -1,17 +1,39 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import Didact from './own/didact';
+import DidactDOM from './own/didact-dom';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+// 1、官方
+// const element = (<div title="223">Hello World</div>)
+// ReactDOM.render(
+//   element,
+//   document.getElementById('root')
+// );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// 2、普通标签元素
+// const element = Didact.createElement('h1', {
+//   className: 'title',
+//   style: {
+//     color: 'red',
+//     fontSize: '20px'
+//   }
+// }, Didact.createElement('span', null, 'Hello'), 'World!!!')
+
+
+// 3、函数组件
+// function FunctionChild () {
+//   // return <div className="child-section">ChildSection</div>
+//   return Didact.createElement('div', {className: 'child-section'}, 'FunctionChild')
+// }
+
+// const element = Didact.createElement(FunctionChild, {title: 'root'})
+
+// 4、类组件
+class ClassSection extends Didact.Component {
+  render () {
+    return Didact.createElement('div', {
+      className: 'child-section'
+    }, `ClassSection: ${this.props.name}`)
+  }
+}
+const element = Didact.createElement(ClassSection, {name: 'from root'})
+
+DidactDOM.render(element, document.getElementById('root'));
