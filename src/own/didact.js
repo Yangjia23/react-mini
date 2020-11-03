@@ -10,6 +10,12 @@ import Component from './Component'
  */
 
 function createElement(type, props, ...children) {
+  let ref 
+  if (props) {
+    ref = props.ref
+    delete props.ref
+  }
+  // ref 和 props 同级
   return {
     type,
     props: {
@@ -19,7 +25,8 @@ function createElement(type, props, ...children) {
           ? child
           : createTextElement(child)
       ),
-    }
+    },
+    ref
   }
 }
 
@@ -38,8 +45,16 @@ function createTextElement(text) {
   }
 }
 
+/**
+ * @description 创建ref
+ */
+function createRef() {
+  return {current: null}
+}
+
 const Didact = {
   createElement,
+  createRef,
   Component
 }
 

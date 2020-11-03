@@ -6,7 +6,7 @@ function render(element, container) {
 }
 
 export function createDOM(element) { // element {type, props}
-  const {type, props} = element
+  const {type, props, ref} = element
   let dom = ''
   if (typeof type === 'function') {
     // 当 type 是个函数时，可能是函数组件或类组件
@@ -20,6 +20,7 @@ export function createDOM(element) { // element {type, props}
   }
   handlerElementProps(dom, props);
   props && props.children && handlerElementChildren(dom, props.children);
+  if (ref) ref.current = dom
   return dom
 }
 
