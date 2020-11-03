@@ -1,9 +1,11 @@
+import {addEvent} from './event';
+
 function render(element, container) {
   const dom = createDOM(element); // 创建真实DOM
   container.appendChild(dom);
 }
 
-function createDOM(element) { // element {type, props}
+export function createDOM(element) { // element {type, props}
   const {type, props} = element
   let dom = ''
   if (typeof type === 'function') {
@@ -17,7 +19,7 @@ function createDOM(element) { // element {type, props}
       : document.createElement(type);
   }
   handlerElementProps(dom, props);
-  handlerElementChildren(dom, props.children);
+  props && props.children && handlerElementChildren(dom, props.children);
   return dom
 }
 
@@ -29,7 +31,8 @@ function createDOM(element) { // element {type, props}
  */
 function handlerElementProps(dom, props) {
   const isProperty = (key) => key !== "children";
-  Object.keys(props)
+  
+  props && Object.keys(props)
     .filter(isProperty)
     .forEach((name) => {
       // todo style 特殊处理
@@ -38,6 +41,10 @@ function handlerElementProps(dom, props) {
         Object.keys(styleObj).forEach((key) => {
           dom.style[key] = styleObj[key];
         });
+      } else if (name.startsWith('on')){
+        // 绑定事件
+        // dom[name.toLocaleLowerCase()] = props[name]
+        addEvent(dom, name.toLocaleLowerCase(), props[name])
       } else {
         dom[name] = props[name];
       }
@@ -73,7 +80,9 @@ function handlerFunctionComponent({type, props}) {
 function handlerClassComponent({type, props}) {
   const classInstance = new type(props)
   const renderElement = classInstance.render()
-  return createDOM(renderElement)
+  const dom = createDOM(renderElement)
+  classInstance.dom = dom
+  return dom
 }
 
 const DidactDOM = {

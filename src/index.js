@@ -1,39 +1,42 @@
-import Didact from './own/didact';
-import DidactDOM from './own/didact-dom';
+/** @jsxRuntime classic * / 
+/** @jsx Didact.createElement */
 
-// 1、官方
-// const element = (<div title="223">Hello World</div>)
-// ReactDOM.render(
-//   element,
-//   document.getElementById('root')
-// );
+import Didact from "./own/didact";
+import DidactDOM from "./own/didact-dom";
 
-// 2、普通标签元素
-// const element = Didact.createElement('h1', {
-//   className: 'title',
-//   style: {
-//     color: 'red',
-//     fontSize: '20px'
-//   }
-// }, Didact.createElement('span', null, 'Hello'), 'World!!!')
+// import Didact from "react";
+// import DidactDOM from "react-dom";
 
 
-// 3、函数组件
-// function FunctionChild () {
-//   // return <div className="child-section">ChildSection</div>
-//   return Didact.createElement('div', {className: 'child-section'}, 'FunctionChild')
-// }
-
-// const element = Didact.createElement(FunctionChild, {title: 'root'})
-
-// 4、类组件
 class ClassSection extends Didact.Component {
-  render () {
-    return Didact.createElement('div', {
-      className: 'child-section'
-    }, `ClassSection: ${this.props.name}`)
+  state = {
+  	count: 0
+  }
+  handleClick = () => {
+    this.setState({ count: this.state.count + 1 });
+    console.log(this.state.count);
+    this.setState({ count: this.state.count + 1 });
+    console.log(this.state.count);
+    setTimeout(() => {
+      this.setState({ count: this.state.count + 1 });
+      console.log(this.state.count);
+      this.setState({ count: this.state.count + 1 });
+      console.log(this.state.count);
+    });
+  };
+  parentClick = () => {
+    console.log('parent click')
+  }
+  render() {
+    return (
+      <div className="child-section" onClick={this.parentClick}>
+        <div>{this.state.count}</div>
+        <button onClick={this.handleClick}>Click Me</button>
+      </div>
+    );
   }
 }
-const element = Didact.createElement(ClassSection, {name: 'from root'})
 
-DidactDOM.render(element, document.getElementById('root'));
+const element = <ClassSection />;
+
+DidactDOM.render(element, document.getElementById("root"));
